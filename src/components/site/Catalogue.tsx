@@ -1,9 +1,26 @@
+import { useState } from "react";
 import { categories, type Category } from "@/lib/santo-veste-data";
+import { ProductDetailSheet } from "./ProductDetailSheet";
 
-function ProductCard({ c, feature }: { c: Category; feature?: boolean }) {
+function prefillAndScroll(id: string) {
+  const el = document.getElementById("category-select");
+  if (el && "value" in el) (el as HTMLSelectElement).value = id;
+  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+}
+
+function ProductCard({
+  c,
+  feature,
+  onOpen,
+}: {
+  c: Category;
+  feature?: boolean;
+  onOpen: (c: Category) => void;
+}) {
   return (
     <article
-      className={`group flex flex-col border border-ink/10 bg-paper transition hover:border-ink/40 ${
+      onClick={() => onOpen(c)}
+      className={`group flex cursor-pointer flex-col border border-ink/10 bg-paper transition hover:border-ink/40 ${
         feature ? "md:col-span-2" : ""
       }`}
     >
@@ -55,24 +72,43 @@ function ProductCard({ c, feature }: { c: Category; feature?: boolean }) {
             </div>
           )}
         </dl>
-        <a
-          href={`#contact?category=${c.id}`}
-          onClick={(e) => {
-            e.preventDefault();
-            const el = document.getElementById("category-select");
-            if (el && "value" in el) (el as HTMLSelectElement).value = c.id;
-            document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-          }}
-          className="mt-2 inline-flex w-fit items-center gap-2 border-b border-ink pb-1 text-xs font-semibold uppercase tracking-widest text-ink transition hover:gap-3 hover:text-ochre hover:border-ochre"
-        >
-          Request this →
-        </a>
+        <div className="mt-2 flex items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpen(c);
+            }}
+            className="inline-flex items-center gap-2 border-b border-ink/60 pb-1 text-xs font-semibold uppercase tracking-widest text-ink/70 transition hover:text-ink hover:border-ink"
+          >
+            View details
+          </button>
+          <a
+            href={`#contact?category=${c.id}`}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              prefillAndScroll(c.id);
+            }}
+            className="inline-flex items-center gap-2 border-b border-ink pb-1 text-xs font-semibold uppercase tracking-widest text-ink transition hover:gap-3 hover:text-ochre hover:border-ochre"
+          >
+            Request this →
+          </a>
+        </div>
       </div>
     </article>
   );
 }
 
 export function Catalogue() {
+  const [active, setActive] = useState<Category | null>(null);
+  const [open, setOpen] = useState(false);
+
+  const openCategory = (c: Category) => {
+    setActive(c);
+    setOpen(true);
+  };
+
   return (
     <section id="catalogue" className="border-b border-ink/10 bg-[oklch(0.97_0.008_80)]">
       <div className="mx-auto max-w-7xl px-5 py-20 md:px-8 md:py-28">
@@ -91,10 +127,19 @@ export function Catalogue() {
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((c, i) => (
-            <ProductCard key={c.id} c={c} feature={i === 4} />
+            <ProductCard key={c.id} c={c} feature={i === 4} onOpen={openCategory} />
           ))}
         </div>
       </div>
+      <ProductDetailSheet
+        category={active}
+        open={open}
+        onOpenChange={setOpen}
+        onRequest={(c) => {
+          setOpen(false);
+          setTimeout(() => prefillAndScroll(c.id), 150);
+        }}
+      />
     </section>
   );
 }
