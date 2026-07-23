@@ -1,49 +1,51 @@
-## Product detail drawer
+## Prefill contact form from "Request this"
 
-Add a click-to-open detail view for each catalogue card that surfaces the full spec in a scannable layout, without leaving the page.
+Extend the existing "Request this" flow so it also fills the Quantity, Brief message, and (as read-only reference) the selected category's MOQ / fabrics / base price — not just the category dropdown.
 
-### Behaviour
+### Approach
 
-- Clicking anywhere on a `ProductCard` (image, title, or a new "View details" affordance) opens the drawer for that category. The existing "Request this →" link keeps its current behaviour (scroll to contact + prefill) and stops propagation so it doesn't also open the drawer.
-- Drawer opens as a right-side sheet on `md+` screens and as a bottom sheet on mobile, using shadcn's `Sheet` primitive (already available in the project). Closes via overlay click, ESC, or an explicit close button.
-- Only one drawer open at a time; state lives in `Catalogue.tsx` (`const [active, setActive] = useState<Category | null>(null)`).
-- "Request this" inside the drawer closes the drawer, prefills the contact category, and smooth-scrolls to `#contact` (reuses the existing handler).
+Replace the current DOM-poke prefill (`document.getElementById("category-select").value = id`) with a shared, typed store. A tiny module-scope event bus in `src/lib/request-prefill.ts` exposes:
 
-### Layout inside the drawer
+- `requestCategory(c: Category)` — called by `Catalogue.tsx` and `ProductDetailSheet.tsx`.
+- `subscribeRequest(fn)` — used by `Contact.tsx` to hydrate the form.
 
-Editorial, matches the current card styling (serif display, uppercase eyebrows, thin dividers on `border-ink/10`).
+Handlers in `Catalogue.tsx` / drawer switch from `prefillAndScroll(id)` to `requestCategory(c)` + smooth-scroll to `#contact`. The DOM lookup goes away.
 
-```text
-┌─────────────────────────────────────┐
-│  [hero image, 4/5 or 16/10]         │
-│  index chip · price chip overlay    │
-├─────────────────────────────────────┤
-│  EYEBROW: Category 0X               │
-│  H2 Name (font-display)             │
-│  Full description paragraph         │
-├─────────────────────────────────────┤
-│  Fabrics                            │
-│  ─ value                            │
-│  Features                           │
-│  ─ value (rendered as bullet list   │
-│           by splitting on ", ")     │
-│  MOQ            Sizes               │
-│  ─ value        ─ value             │
-│  Base price                         │
-│  ─ value                            │
-├─────────────────────────────────────┤
-│  [ Request this → ]  [ Close ]      │
-└─────────────────────────────────────┘
-```
+### What gets prefilled in `Contact.tsx`
 
-Features string is split on commas into a compact bulleted list so it scans faster than the current inline text. Missing fields (`moq`, `price`) are omitted, matching current card logic.
+On subscription callback with a `Category`:
+
+- **Category select** → `c.id` (unchanged behaviour).
+- **Quantity input** → parsed from `c.moq` (e.g. `"30 pieces"` → `"30 pieces"`); empty if no MOQ.
+- **Brief textarea** → templated, editable string:
+
+  ```
+  Hi — I'd like a quote for {c.name} (min. {c.moq}).
+
+  Fabrics of interest: {c.fabrics}
+  Options: {c.features}
+  Base price reference: {c.price ?? "on request"}
+
+  My details:
+  - Quantity:
+  - Sizes needed:
+  - Print / embroidery:
+  - Deadline:
+  ```
+
+  Missing lines (no MOQ / no price) are omitted so the message stays clean.
+
+- **Reference summary chip** rendered above the form fields when a prefill is active: a small dismissible block showing `Name · MOQ · Base price · Fabrics` so the user sees the spec they requested without hunting through the brief. Dismissing it clears the chip only; form values stay put.
+
+Form state moves to controlled inputs (`useState` for name/email/phone/quantity/category/message + `selected: Category | null`) so the subscription can update them and `reset()` still works on submit.
 
 ### Files touched
 
-- `src/components/site/Catalogue.tsx` — add drawer state, make card clickable, render `<ProductDetailSheet>`.
-- `src/components/site/ProductDetailSheet.tsx` — new component, receives `category` + `open` + `onOpenChange` + `onRequest`.
-- No changes to data, routing, styles, or contact logic.
+- `src/lib/request-prefill.ts` — new tiny pub/sub module (no deps).
+- `src/components/site/Catalogue.tsx` — swap `prefillAndScroll` for `requestCategory` + scroll; drop the DOM id lookup.
+- `src/components/site/ProductDetailSheet.tsx` — `onRequest` uses the new bus.
+- `src/components/site/Contact.tsx` — controlled inputs, `useEffect` subscription, reference chip, template builder.
 
 ### Out of scope
 
-Image gallery, related products, deep-linking the drawer via URL, and any data-model changes.
+Persistence across reloads, multi-category requests, backend submission, and any change to the demo toast behaviour.
