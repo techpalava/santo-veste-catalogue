@@ -1,24 +1,50 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Nav } from "@/components/site/Nav";
+import { Hero } from "@/components/site/Hero";
+import { About } from "@/components/site/About";
+import { Catalogue } from "@/components/site/Catalogue";
+import { Customization } from "@/components/site/Customization";
+import { Process } from "@/components/site/Process";
+import { Contact } from "@/components/site/Contact";
+import { Footer } from "@/components/site/Footer";
+import { Toaster } from "@/components/ui/sonner";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Santo Veste — Custom & Ready-to-Wear Apparel" },
+      {
+        name: "description",
+        content:
+          "Santo Veste crafts ready-to-wear and custom-fitted unisex clothing — tees, polos, hoodies, jerseys, uniforms, scrubs, jackets and more. Premium tailoring for individuals, teams and bulk orders.",
+      },
+      { property: "og:title", content: "Santo Veste — Custom & Ready-to-Wear Apparel" },
+      {
+        property: "og:description",
+        content:
+          "Ready-to-wear and custom-fitted unisex clothing. Twelve product categories, in-house printing and embroidery, MOQ from 30 pieces.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-paper text-ink">
+      <Nav />
+      <main>
+        <Hero />
+        <About />
+        <Catalogue />
+        <Customization />
+        <Process />
+        <Contact />
+      </main>
+      <Footer />
+      <Toaster position="bottom-center" />
     </div>
   );
 }
