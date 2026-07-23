@@ -1,46 +1,49 @@
+## Product detail drawer
 
-# Santo Veste — Catalogue Website (UI only)
+Add a click-to-open detail view for each catalogue card that surfaces the full spec in a scannable layout, without leaving the page.
 
-A polished, mobile-first one-page site built entirely from the attached catalogue. No backend, no auth, no cart, no real form submissions — pure presentation.
+### Behaviour
 
-## Content source (from the PDF)
+- Clicking anywhere on a `ProductCard` (image, title, or a new "View details" affordance) opens the drawer for that category. The existing "Request this →" link keeps its current behaviour (scroll to contact + prefill) and stops propagation so it doesn't also open the drawer.
+- Drawer opens as a right-side sheet on `md+` screens and as a bottom sheet on mobile, using shadcn's `Sheet` primitive (already available in the project). Closes via overlay click, ESC, or an explicit close button.
+- Only one drawer open at a time; state lives in `Catalogue.tsx` (`const [active, setActive] = useState<Category | null>(null)`).
+- "Request this" inside the drawer closes the drawer, prefills the contact category, and smooth-scrolls to `#contact` (reuses the existing handler).
 
-- Brand: **Santo Veste** — ready-to-wear and custom-fitted unisex clothing; faith-meets-fashion positioning; premium materials, tailoring, comfort.
-- 11 product categories with descriptions, fabrics, features, MOQ and base prices verbatim from the catalogue (round-neck tees, layered tees, polos, sweatshirts, hoodies & joggers, jerseys, uniforms, medical scrubs, mandarin/collared shirts, jackets, shorts).
-- Customization: printing (screen, DTF, DTG, sublimation), embroidery/monogramming, logo/slogan/team-name branding, buttons/zippers/collars, branded packaging for bulk.
-- Order process: 5 steps as listed in the catalogue.
-- Contact: catalogue's contact page wasn't in the parsed text — I'll show a clean contact block with placeholder handles (email, phone, WhatsApp, Instagram) clearly marked so you can swap in real details in one edit.
+### Layout inside the drawer
 
-## Design direction
+Editorial, matches the current card styling (serif display, uppercase eyebrows, thin dividers on `border-ink/10`).
 
-Bold editorial black-and-white base — big serif display headings, small uppercase eyebrows, generous whitespace, thin dividers, catalogue-style page numbers and section labels. Accent color pulled from the garment palette (deep olive + a warm ochre) used sparingly on rules, hover states, and CTA. Real catalogue imagery used throughout; garments carry the color.
+```text
+┌─────────────────────────────────────┐
+│  [hero image, 4/5 or 16/10]         │
+│  index chip · price chip overlay    │
+├─────────────────────────────────────┤
+│  EYEBROW: Category 0X               │
+│  H2 Name (font-display)             │
+│  Full description paragraph         │
+├─────────────────────────────────────┤
+│  Fabrics                            │
+│  ─ value                            │
+│  Features                           │
+│  ─ value (rendered as bullet list   │
+│           by splitting on ", ")     │
+│  MOQ            Sizes               │
+│  ─ value        ─ value             │
+│  Base price                         │
+│  ─ value                            │
+├─────────────────────────────────────┤
+│  [ Request this → ]  [ Close ]      │
+└─────────────────────────────────────┘
+```
 
-## Page structure (single route `/`)
+Features string is split on commas into a compact bulleted list so it scans faster than the current inline text. Missing fields (`moq`, `price`) are omitted, matching current card logic.
 
-1. **Top nav** — thin, sticky, wordmark left, anchor links right (About / Catalogue / Customization / Process / Contact), mobile sheet.
-2. **Hero** — full-bleed catalogue image, wordmark, tagline ("Faith. Tailoring. Ready-to-wear."), short value prop, two CTAs (Explore catalogue / Request a quote — both scroll anchors).
-3. **About** — catalogue's About + "How we're unique" condensed into 5 numbered principles + expertise strip.
-4. **Product catalogue** — 11 category cards in an editorial magazine grid (asymmetric, not a uniform 3-col). Each card: hero image, category name, short description, fabrics, features, MOQ, base price, sizes. "Request this" button scrolls to contact with the category prefilled in the form UI (client-side only).
-5. **Customization services** — 6 tiles (printing, DTF/DTG/sublimation, embroidery, branding, hardware, branded packaging) with icon + short blurb.
-6. **Order process** — 5 numbered steps as a horizontal editorial timeline on desktop, vertical on mobile.
-7. **Contact** — split layout: contact details block (email / phone / WhatsApp / Instagram placeholders) + non-functional inquiry form UI (name, email, phone, category select prefilled from step 4, quantity, message). Submit shows a toast "Thanks — this is a demo form" and resets.
-8. **Footer** — wordmark, tagline, small print, back-to-top.
+### Files touched
 
-## Assets
+- `src/components/site/Catalogue.tsx` — add drawer state, make card clickable, render `<ProductDetailSheet>`.
+- `src/components/site/ProductDetailSheet.tsx` — new component, receives `category` + `open` + `onOpenChange` + `onRequest`.
+- No changes to data, routing, styles, or contact logic.
 
-- Copy the relevant catalogue page images from `parsed-documents://.../images/` into `src/assets/catalogue/` (hero, one per category, process/customization support shots). Reference via ES imports so Vite fingerprints them.
-- No generated stock images — catalogue photography only.
+### Out of scope
 
-## Technical
-
-- New file: `src/routes/index.tsx` replaces the placeholder with the composed page.
-- Section components under `src/components/site/` (Hero, About, Catalogue, ProductCard, Customization, Process, Contact, Footer, Nav).
-- Product data in `src/lib/santo-veste-data.ts` (categories array + services + steps).
-- Design tokens: extend `src/styles.css` with an editorial serif + clean sans font pair (loaded via `<link>` in `__root.tsx`), plus `--accent-olive` and `--accent-ochre` semantic tokens mapped through `@theme inline`.
-- SEO: unique `head()` on `/` — title "Santo Veste — Custom & Ready-to-Wear Apparel", description from the About copy, og/twitter tags with hero image URL.
-- Form is `useState` only; submit handler calls `toast()` and resets.
-- Fully responsive: single column mobile → editorial grid ≥ md.
-
-## Explicitly out of scope
-
-Auth, payments, database, real email/WhatsApp sending, cart/checkout, admin, image uploads.
+Image gallery, related products, deep-linking the drawer via URL, and any data-model changes.
