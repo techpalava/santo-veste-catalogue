@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { categories, type Category } from "@/lib/santo-veste-data";
+import { requestCategory } from "@/lib/request-prefill";
 import { ProductDetailSheet } from "./ProductDetailSheet";
 
-function prefillAndScroll(id: string) {
-  const el = document.getElementById("category-select");
-  if (el && "value" in el) (el as HTMLSelectElement).value = id;
+function requestAndScroll(c: Category) {
+  requestCategory(c);
   document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
 }
 
