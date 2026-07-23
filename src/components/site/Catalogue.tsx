@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { categories, type Category } from "@/lib/santo-veste-data";
+import { requestCategory } from "@/lib/request-prefill";
 import { ProductDetailSheet } from "./ProductDetailSheet";
 
-function prefillAndScroll(id: string) {
-  const el = document.getElementById("category-select");
-  if (el && "value" in el) (el as HTMLSelectElement).value = id;
+function requestAndScroll(c: Category) {
+  requestCategory(c);
   document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
 }
 
@@ -88,7 +88,7 @@ function ProductCard({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              prefillAndScroll(c.id);
+              requestAndScroll(c);
             }}
             className="inline-flex items-center gap-2 border-b border-ink pb-1 text-xs font-semibold uppercase tracking-widest text-ink transition hover:gap-3 hover:text-ochre hover:border-ochre"
           >
@@ -137,7 +137,7 @@ export function Catalogue() {
         onOpenChange={setOpen}
         onRequest={(c) => {
           setOpen(false);
-          setTimeout(() => prefillAndScroll(c.id), 150);
+          setTimeout(() => requestAndScroll(c), 150);
         }}
       />
     </section>

@@ -1,7 +1,8 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
-import { Mail, Phone, MessageCircle, Instagram, MapPin } from "lucide-react";
-import { categories } from "@/lib/santo-veste-data";
+import { Mail, Phone, MessageCircle, Instagram, MapPin, X } from "lucide-react";
+import { categories, type Category } from "@/lib/santo-veste-data";
+import { subscribeRequest, buildBrief } from "@/lib/request-prefill";
 
 const contactRows = [
   { icon: Mail, label: "Email", value: "hello@santoveste.com" },
@@ -11,8 +12,35 @@ const contactRows = [
   { icon: MapPin, label: "Studio", value: "Lagos, Nigeria" },
 ];
 
+const emptyForm = {
+  name: "",
+  email: "",
+  phone: "",
+  quantity: "",
+  category: "",
+  message: "",
+};
+
 export function Contact() {
   const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState(emptyForm);
+  const [selected, setSelected] = useState<Category | null>(null);
+
+  useEffect(() => {
+    return subscribeRequest((c) => {
+      setSelected(c);
+      setForm((prev) => ({
+        ...prev,
+        category: c.id,
+        quantity: c.moq ?? prev.quantity,
+        message: buildBrief(c),
+      }));
+    });
+  }, []);
+
+  function update<K extends keyof typeof form>(key: K, value: string) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  }
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -21,7 +49,8 @@ export function Contact() {
       toast.success("Thanks — this is a demo form.", {
         description: "We'd normally reply within one business day.",
       });
-      (e.target as HTMLFormElement).reset();
+      setForm(emptyForm);
+      setSelected(null);
       setSubmitting(false);
     }, 500);
   }
@@ -58,18 +87,51 @@ export function Contact() {
             onSubmit={onSubmit}
             className="grid gap-5 border border-ink/15 bg-paper p-6 md:p-10"
           >
+            {selected && (
+              <div className="relative border border-ink/15 bg-[oklch(0.97_0.008_80)] p-4 pr-10">
+                <p className="eyebrow text-ink/50">Requesting</p>
+                <p className="mt-1 font-display text-lg font-bold text-ink">{selected.name}</p>
+                <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-ink/70">
+                  {selected.moq && (
+                    <div>
+                      <dt className="inline eyebrow text-ink/45">MOQ · </dt>
+                      <dd className="inline">{selected.moq}</dd>
+                    </div>
+                  )}
+                  {selected.price && (
+                    <div>
+                      <dt className="inline eyebrow text-ink/45">Base · </dt>
+                      <dd className="inline">{selected.price}</dd>
+                    </div>
+                  )}
+                  <div className="col-span-2">
+                    <dt className="inline eyebrow text-ink/45">Fabrics · </dt>
+                    <dd className="inline">{selected.fabrics}</dd>
+                  </div>
+                </dl>
+                <button
+                  type="button"
+                  onClick={() => setSelected(null)}
+                  aria-label="Clear reference"
+                  className="absolute right-2 top-2 p-1 text-ink/40 transition hover:text-ink"
+                >
+                  <X className="size-4" />
+                </button>
+              </div>
+            )}
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Full name" name="name" required />
-              <Field label="Email" name="email" type="email" required />
-              <Field label="Phone / WhatsApp" name="phone" />
-              <Field label="Quantity" name="quantity" placeholder="e.g. 60 pieces" />
+              <Field label="Full name" name="name" required value={form.name} onChange={(v) => update("name", v)} />
+              <Field label="Email" name="email" type="email" required value={form.email} onChange={(v) => update("email", v)} />
+              <Field label="Phone / WhatsApp" name="phone" value={form.phone} onChange={(v) => update("phone", v)} />
+              <Field label="Quantity" name="quantity" placeholder="e.g. 60 pieces" value={form.quantity} onChange={(v) => update("quantity", v)} />
             </div>
             <label className="grid gap-2">
               <span className="eyebrow text-ink/60">Product category</span>
               <select
                 id="category-select"
                 name="category"
-                defaultValue=""
+                value={form.category}
+                onChange={(e) => update("category", e.target.value)}
                 className="h-11 border border-ink/20 bg-paper px-3 text-sm text-ink focus:border-ink focus:outline-none"
               >
                 <option value="" disabled>
@@ -87,8 +149,10 @@ export function Contact() {
               <span className="eyebrow text-ink/60">Brief</span>
               <textarea
                 name="message"
-                rows={5}
+                rows={8}
                 required
+                value={form.message}
+                onChange={(e) => update("message", e.target.value)}
                 placeholder="Tell us about sizes, fabric preferences, printing or embroidery, deadlines..."
                 className="border border-ink/20 bg-paper p-3 text-sm text-ink focus:border-ink focus:outline-none"
               />
@@ -116,12 +180,16 @@ function Field({
   type = "text",
   placeholder,
   required,
+  value,
+  onChange,
 }: {
   label: string;
   name: string;
   type?: string;
   placeholder?: string;
   required?: boolean;
+  value: string;
+  onChange: (v: string) => void;
 }) {
   return (
     <label className="grid gap-2">
@@ -134,6 +202,8 @@ function Field({
         type={type}
         placeholder={placeholder}
         required={required}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         className="h-11 border border-ink/20 bg-paper px-3 text-sm text-ink focus:border-ink focus:outline-none"
       />
     </label>
