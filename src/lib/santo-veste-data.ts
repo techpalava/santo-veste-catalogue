@@ -11,6 +11,14 @@ import collared from "@/assets/catalogue/collared.jpg";
 import jackets from "@/assets/catalogue/jackets.jpg";
 import shorts from "@/assets/catalogue/shorts.jpg";
 
+export type ProductGalleryImage = {
+  src: string;
+  alt: string;
+  label?: string;
+  objectPosition?: string;
+  scale?: number;
+};
+
 export type Category = {
   id: string;
   index: string;
@@ -22,6 +30,7 @@ export type Category = {
   price?: string;
   sizes: string;
   image: string;
+  gallery?: ProductGalleryImage[];
 };
 
 export const categories: Category[] = [
