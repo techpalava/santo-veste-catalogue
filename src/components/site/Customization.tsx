@@ -9,7 +9,7 @@ export function Customization() {
           <div className="space-y-6">
             <p className="eyebrow text-ochre">03 — Customization Services</p>
             <h2 className="font-display text-4xl font-extrabold leading-tight md:text-5xl">
-              Make it undeniably <span className="italic text-ochre">yours.</span>
+              Make it undeniably <span className="text-ochre">yours.</span>
             </h2>
             <p className="max-w-md text-base leading-relaxed text-paper/70">
               From single embroidered monograms to full team kits and
@@ -19,7 +19,7 @@ export function Customization() {
             <img
               src={customization}
               alt="Fabric swatches, buttons and design references on a workshop table"
-              className="mt-6 aspect-[4/3] w-full object-cover grayscale"
+              className="mt-6 aspect-[4/3] w-full border-2 border-paper/20 object-cover grayscale"
             />
           </div>
           <ul className="grid grid-cols-1 gap-px bg-paper/15 sm:grid-cols-2">

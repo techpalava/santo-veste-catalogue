@@ -20,7 +20,7 @@ function ProductCard({
   return (
     <article
       onClick={() => onOpen(c)}
-      className={`group flex cursor-pointer flex-col border border-ink/10 bg-paper transition hover:border-ink/40 ${
+      className={`group flex cursor-pointer flex-col border-2 border-ink/15 bg-paper transition hover:-translate-y-1 hover:border-ink hover:shadow-[6px_6px_0_var(--ink)] ${
         feature ? "md:col-span-2" : ""
       }`}
     >
@@ -32,11 +32,11 @@ function ProductCard({
             feature ? "aspect-[16/10]" : "aspect-[4/5]"
           }`}
         />
-        <span className="absolute left-3 top-3 rounded-sm bg-paper/95 px-2 py-1 font-display text-xs font-bold text-ink">
+        <span className="absolute left-3 top-3 bg-paper/95 px-2 py-1 font-display text-xs font-bold text-ink">
           {c.index}
         </span>
         {c.price && (
-          <span className="absolute right-3 top-3 rounded-sm bg-ink px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-paper">
+          <span className="absolute right-3 top-3 bg-ink px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-paper">
             {c.price.startsWith("Set") ? "Set price" : c.price}
           </span>
         )}
@@ -110,7 +110,7 @@ export function Catalogue() {
   };
 
   return (
-    <section id="catalogue" className="border-b border-ink/10 bg-[oklch(0.97_0.008_80)]">
+    <section id="catalogue" className="sv-pattern border-b border-ink/15 bg-secondary">
       <div className="mx-auto max-w-7xl px-5 py-20 md:px-8 md:py-28">
         <div className="mb-12 flex flex-col justify-between gap-6 md:mb-16 md:flex-row md:items-end">
           <div>

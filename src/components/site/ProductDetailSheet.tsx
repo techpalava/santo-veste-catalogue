@@ -20,17 +20,17 @@ export function ProductDetailSheet({ category, open, onOpenChange, onRequest }: 
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="w-full overflow-y-auto border-l border-ink/10 bg-paper p-0 sm:max-w-lg"
+        className="w-full overflow-y-auto border-l-2 border-ink bg-paper p-0 sm:max-w-lg"
       >
         {c && (
           <div className="flex flex-col">
             <div className="relative">
               <img src={c.image} alt={c.name} className="aspect-[4/5] w-full object-cover" />
-              <span className="absolute left-4 top-4 rounded-sm bg-paper/95 px-2 py-1 font-display text-xs font-bold text-ink">
+              <span className="absolute left-4 top-4 bg-paper/95 px-2 py-1 font-display text-xs font-bold text-ink">
                 {c.index}
               </span>
               {c.price && (
-                <span className="absolute right-4 top-4 rounded-sm bg-ink px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-paper">
+                <span className="absolute right-4 top-4 bg-ink px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-paper">
                   {c.price.startsWith("Set") ? "Set price" : c.price}
                 </span>
               )}
