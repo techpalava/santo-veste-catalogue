@@ -99,6 +99,11 @@ export const categories: Category[] = [
     price: "from NGN 20,000",
     sizes: "S – XXXL",
     image: sweatshirts,
+    cardCrop: {
+      objectPosition: "left top",
+      scale: 2.2,
+      transformOrigin: "left top",
+    },
   },
   {
     id: "hoodies",
@@ -112,6 +117,11 @@ export const categories: Category[] = [
     price: "Set from NGN 40,000 · Hoodie 25,000 · Joggers 20,000",
     sizes: "S – XXXL",
     image: hoodies,
+    cardCrop: {
+      objectPosition: "center top",
+      scale: 1.44,
+      transformOrigin: "center top",
+    },
   },
   {
     id: "jerseys",
