@@ -1,8 +1,9 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
-import { Mail, Phone, MessageCircle, Instagram, MapPin, X } from "lucide-react";
+import { Mail, Phone, MessageCircle, Instagram, MapPin, X, Download } from "lucide-react";
 import { categories, type Category } from "@/lib/santo-veste-data";
 import { subscribeRequest, buildBrief } from "@/lib/request-prefill";
+import { downloadRequestPdf } from "@/lib/request-pdf";
 
 const contactRows = [
   { icon: Mail, label: "Email", value: "hello@santoveste.com" },
