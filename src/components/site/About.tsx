@@ -26,11 +26,13 @@ export function About() {
               look good, feel good and empower you to showcase your faith with
               confidence and style.
             </p>
-            <img
-              src={about}
-              alt="Group of men wearing Santo Veste apparel"
-              className="aspect-[4/3] w-full border-2 border-ink object-cover"
-            />
+            <figure className="aspect-[4/3] overflow-hidden border-2 border-ink bg-secondary">
+              <img
+                src={about}
+                alt="Group of men wearing Santo Veste apparel"
+                className="h-full w-full origin-top-left scale-[2.02] select-none object-cover object-left-top"
+              />
+            </figure>
           </div>
           <ol className="space-y-8 md:pt-16">
             {pillars.map((p) => (
