@@ -17,7 +17,7 @@ export function About() {
             <p className="eyebrow text-ink/50">01 — About Santo Veste</p>
             <h2 className="font-display text-4xl font-extrabold leading-tight text-ink md:text-5xl">
               We don't just make clothing. We craft statements of
-              <span className="italic text-olive"> faith and authenticity.</span>
+              <span className="text-ochre"> faith and authenticity.</span>
             </h2>
             <p className="max-w-lg text-base leading-relaxed text-ink/70">
               At Santo Veste we combine traditional and modern tailoring
@@ -29,7 +29,7 @@ export function About() {
             <img
               src={about}
               alt="Group of men wearing Santo Veste apparel"
-              className="aspect-[4/3] w-full object-cover"
+              className="aspect-[4/3] w-full border-2 border-ink object-cover"
             />
           </div>
           <ol className="space-y-8 md:pt-16">
