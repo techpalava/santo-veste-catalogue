@@ -127,7 +127,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="border-b border-ink/10 bg-[oklch(0.97_0.008_80)]">
+    <section id="contact" className="sv-pattern border-b border-ink/15 bg-secondary">
       <div className="mx-auto max-w-7xl px-5 py-20 md:px-8 md:py-28">
         <div className="grid gap-14 md:grid-cols-[0.9fr_1.1fr] md:gap-20">
           <div className="space-y-8">
@@ -162,10 +162,10 @@ export function Contact() {
 
           <form
             onSubmit={onSubmit}
-            className="grid gap-5 border border-ink/15 bg-paper p-6 md:p-10"
+            className="grid gap-5 border-2 border-ink bg-paper p-6 shadow-[8px_8px_0_var(--ink)] md:p-10"
           >
             {selected && (
-              <div className="relative border border-ink/15 bg-[oklch(0.97_0.008_80)] p-4 pr-10">
+              <div className="relative border border-ink/15 bg-secondary p-4 pr-10">
                 <p className="eyebrow text-ink/50">Requesting</p>
                 <p className="mt-1 font-display text-lg font-bold text-ink">{selected.name}</p>
                 <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-ink/70">
@@ -247,7 +247,7 @@ export function Contact() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold uppercase tracking-widest text-paper transition hover:bg-ochre hover:text-ink disabled:opacity-60"
+                className="inline-flex items-center justify-center gap-2 bg-ink px-6 py-3 text-sm font-semibold uppercase tracking-widest text-paper transition hover:bg-ochre hover:text-ink disabled:opacity-60"
               >
                 {submitting ? "Sending…" : "Send inquiry"}
               </button>
