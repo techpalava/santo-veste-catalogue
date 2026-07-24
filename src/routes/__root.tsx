@@ -72,19 +72,22 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+const siteDescription =
+  "Santo Veste creates premium ready-to-wear and custom-fitted apparel for individuals, teams and organizations in Lagos, Nigeria.";
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Santo Veste — Custom & Ready-to-Wear Apparel" },
+      { name: "description", content: siteDescription },
+      { name: "author", content: "Santo Veste" },
+      { property: "og:title", content: "Santo Veste — Custom & Ready-to-Wear Apparel" },
+      { property: "og:description", content: siteDescription },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Santo Veste" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
