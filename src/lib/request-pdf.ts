@@ -85,7 +85,7 @@ export function downloadRequestPdf(form: FormSnapshot, selected: Category | null
   }
 
   // Contact details
-  doc.setFillColor(20);
+  doc.setFillColor(20, 20, 20);
   doc.rect(margin, y, contentW, 24, "F");
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
