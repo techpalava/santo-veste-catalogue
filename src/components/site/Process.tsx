@@ -18,9 +18,9 @@ export function Process() {
           </p>
         </div>
 
-        <ol className="grid gap-px bg-ink/10 md:grid-cols-5">
+        <ol className="grid gap-0 border-2 border-ink md:grid-cols-5">
           {orderSteps.map((s, i) => (
-            <li key={s.title} className="flex flex-col gap-4 bg-paper p-6">
+            <li key={s.title} className="flex flex-col gap-4 border-b border-r border-ink/20 bg-paper p-6 last:border-r-0 md:border-b-0">
               <div className="flex items-baseline justify-between">
                 <span className="font-display text-4xl font-extrabold text-ochre">
                   {String(i + 1).padStart(2, "0")}
@@ -39,9 +39,9 @@ export function Process() {
           <img
             src={process}
             alt="Santo Veste production — swatches, sketches and sewing"
-            className="aspect-[16/9] w-full object-cover"
+            className="aspect-[16/9] w-full border-2 border-ink object-cover"
           />
-          <blockquote className="font-display text-2xl font-medium italic leading-snug text-ink md:text-3xl">
+          <blockquote className="border-l-4 border-ochre pl-6 font-display text-2xl font-bold leading-snug text-ink md:text-3xl">
             "Each Santo Veste creation tells a story of confidence — allowing
             wearers to stand out, inspire others, and remain true to their
             beliefs."
