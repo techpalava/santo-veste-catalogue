@@ -19,6 +19,12 @@ export type ProductGalleryImage = {
   scale?: number;
 };
 
+export type ProductCardCrop = {
+  objectPosition: string;
+  scale?: number;
+  transformOrigin?: string;
+};
+
 export type Category = {
   id: string;
   index: string;
@@ -30,6 +36,7 @@ export type Category = {
   price?: string;
   sizes: string;
   image: string;
+  cardCrop?: ProductCardCrop;
   gallery?: ProductGalleryImage[];
 };
 
@@ -45,6 +52,11 @@ export const categories: Category[] = [
     price: "from NGN 15,000",
     sizes: "S – XXXL",
     image: roundneck,
+    cardCrop: {
+      objectPosition: "left center",
+      scale: 1.06,
+      transformOrigin: "left center",
+    },
   },
   {
     id: "layered",
@@ -57,6 +69,11 @@ export const categories: Category[] = [
     price: "from NGN 15,000",
     sizes: "S – XXXL",
     image: layered,
+    cardCrop: {
+      objectPosition: "left center",
+      scale: 1.06,
+      transformOrigin: "left center",
+    },
   },
   {
     id: "polos",
