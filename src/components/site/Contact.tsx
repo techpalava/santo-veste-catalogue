@@ -27,20 +27,57 @@ export function Contact() {
   const [form, setForm] = useState(emptyForm);
   const [selected, setSelected] = useState<Category | null>(null);
 
-  useEffect(() => {
-    return subscribeRequest((c) => {
-      setSelected(c);
-      setForm((prev) => ({
-        ...prev,
-        category: c.id,
-        quantity: c.moq ?? prev.quantity,
-        message: buildBrief(c),
-      }));
-    });
-  }, []);
+  function applyCategory(c: Category) {
+    setSelected(c);
+    setForm((prev) => ({
+      ...prev,
+      category: c.id,
+      quantity: c.moq ?? prev.quantity,
+      message: buildBrief(c),
+    }));
+  }
+
+  useEffect(() => subscribeRequest(applyCategory), []);
 
   function update<K extends keyof typeof form>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function selectCategory(value: string) {
+    const category = categories.find((c) => c.id === value) ?? null;
+    if (category) {
+      applyCategory(category);
+      return;
+    }
+
+    setSelected(null);
+    setForm((prev) => ({ ...prev, category: value }));
+  }
+
+  function clearReference() {
+    setSelected(null);
+    setForm((prev) => ({
+      ...prev,
+      category: "",
+      quantity: "",
+      message: "",
+    }));
+  }
+
+  function validateRequest() {
+    if (!form.name.trim() || !form.email.trim() || !form.category || !form.message.trim()) {
+      toast.error("Complete the required fields", {
+        description: "Add your name, email, product category and brief first.",
+      });
+      return false;
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) {
+      toast.error("Enter a valid email address");
+      return false;
+    }
+
+    return true;
   }
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -54,6 +91,14 @@ export function Contact() {
       setSelected(null);
       setSubmitting(false);
     }, 500);
+  }
+
+  function downloadPdf() {
+    if (!validateRequest()) return;
+    downloadRequestPdf(form, selected);
+    toast.success("PDF downloaded", {
+      description: "Share it with the Santo Veste team.",
+    });
   }
 
   return (
@@ -112,7 +157,7 @@ export function Contact() {
                 </dl>
                 <button
                   type="button"
-                  onClick={() => setSelected(null)}
+                  onClick={clearReference}
                   aria-label="Clear reference"
                   className="absolute right-2 top-2 p-1 text-ink/40 transition hover:text-ink"
                 >
@@ -127,12 +172,13 @@ export function Contact() {
               <Field label="Quantity" name="quantity" placeholder="e.g. 60 pieces" value={form.quantity} onChange={(v) => update("quantity", v)} />
             </div>
             <label className="grid gap-2">
-              <span className="eyebrow text-ink/60">Product category</span>
+              <span className="eyebrow text-ink/60">Product category *</span>
               <select
                 id="category-select"
                 name="category"
+                required
                 value={form.category}
-                onChange={(e) => update("category", e.target.value)}
+                onChange={(e) => selectCategory(e.target.value)}
                 className="h-11 border border-ink/20 bg-paper px-3 text-sm text-ink focus:border-ink focus:outline-none"
               >
                 <option value="" disabled>
@@ -147,7 +193,7 @@ export function Contact() {
               </select>
             </label>
             <label className="grid gap-2">
-              <span className="eyebrow text-ink/60">Brief</span>
+              <span className="eyebrow text-ink/60">Brief *</span>
               <textarea
                 name="message"
                 rows={8}
@@ -161,12 +207,7 @@ export function Contact() {
             <div className="mt-2 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
               <button
                 type="button"
-                onClick={() => {
-                  downloadRequestPdf(form, selected);
-                  toast.success("PDF downloaded", {
-                    description: "Share it with the Santo Veste team.",
-                  });
-                }}
+                onClick={downloadPdf}
                 className="inline-flex items-center justify-center gap-2 border border-ink/30 px-5 py-3 text-xs font-semibold uppercase tracking-widest text-ink transition hover:border-ink hover:bg-ink hover:text-paper"
               >
                 <Download className="size-4" />
