@@ -1,8 +1,9 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
-import { Mail, Phone, MessageCircle, Instagram, MapPin, X } from "lucide-react";
+import { Mail, Phone, MessageCircle, Instagram, MapPin, X, Download } from "lucide-react";
 import { categories, type Category } from "@/lib/santo-veste-data";
 import { subscribeRequest, buildBrief } from "@/lib/request-prefill";
+import { downloadRequestPdf } from "@/lib/request-pdf";
 
 const contactRows = [
   { icon: Mail, label: "Email", value: "hello@santoveste.com" },
@@ -157,13 +158,28 @@ export function Contact() {
                 className="border border-ink/20 bg-paper p-3 text-sm text-ink focus:border-ink focus:outline-none"
               />
             </label>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold uppercase tracking-widest text-paper transition hover:bg-ochre hover:text-ink disabled:opacity-60"
-            >
-              {submitting ? "Sending…" : "Send inquiry"}
-            </button>
+            <div className="mt-2 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  downloadRequestPdf(form, selected);
+                  toast.success("PDF downloaded", {
+                    description: "Share it with the Santo Veste team.",
+                  });
+                }}
+                className="inline-flex items-center justify-center gap-2 border border-ink/30 px-5 py-3 text-xs font-semibold uppercase tracking-widest text-ink transition hover:border-ink hover:bg-ink hover:text-paper"
+              >
+                <Download className="size-4" />
+                Download PDF
+              </button>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold uppercase tracking-widest text-paper transition hover:bg-ochre hover:text-ink disabled:opacity-60"
+              >
+                {submitting ? "Sending…" : "Send inquiry"}
+              </button>
+            </div>
             <p className="text-[11px] text-ink/45">
               Demo form — no data is stored or sent.
             </p>
