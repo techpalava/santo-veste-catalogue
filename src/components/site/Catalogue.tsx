@@ -17,6 +17,8 @@ function ProductCard({
   feature?: boolean;
   onOpen: (c: Category) => void;
 }) {
+  const cropScale = c.cardCrop?.scale ?? 1;
+
   return (
     <article
       onClick={() => onOpen(c)}
@@ -24,14 +26,24 @@ function ProductCard({
         feature ? "md:col-span-2" : ""
       }`}
     >
-      <div className="relative overflow-hidden">
-        <img
-          src={c.image}
-          alt={c.name}
-          className={`w-full object-cover transition duration-500 group-hover:scale-[1.03] ${
-            feature ? "aspect-[16/10]" : "aspect-[4/5]"
-          }`}
-        />
+      <div
+        className={`relative overflow-hidden bg-secondary ${
+          feature ? "aspect-[16/10]" : "aspect-[4/5]"
+        }`}
+      >
+        <div className="h-full w-full overflow-hidden transition-transform duration-500 group-hover:scale-[1.02]">
+          <img
+            src={c.image}
+            alt={c.name}
+            loading="lazy"
+            className="h-full w-full object-cover"
+            style={{
+              objectPosition: c.cardCrop?.objectPosition ?? "center",
+              transform: `scale(${cropScale})`,
+              transformOrigin: c.cardCrop?.transformOrigin ?? "center",
+            }}
+          />
+        </div>
         <span className="absolute left-3 top-3 bg-paper/95 px-2 py-1 font-display text-xs font-bold text-ink">
           {c.index}
         </span>
