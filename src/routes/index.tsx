@@ -7,6 +7,7 @@ import { Customization } from "@/components/site/Customization";
 import { Process } from "@/components/site/Process";
 import { Contact } from "@/components/site/Contact";
 import { Footer } from "@/components/site/Footer";
+import { FloatingActions } from "@/components/site/FloatingActions";
 import { Toaster } from "@/components/ui/sonner";
 
 export const Route = createFileRoute("/")({
@@ -44,6 +45,7 @@ function Index() {
         <Contact />
       </main>
       <Footer />
+      <FloatingActions />
       <Toaster position="bottom-center" />
     </div>
   );
