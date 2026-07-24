@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Mail, Phone, MessageCircle, Instagram, MapPin, X, Download } from "lucide-react";
 import { categories, type Category } from "@/lib/santo-veste-data";
@@ -27,7 +27,7 @@ export function Contact() {
   const [form, setForm] = useState(emptyForm);
   const [selected, setSelected] = useState<Category | null>(null);
 
-  function applyCategory(c: Category) {
+  const applyCategory = useCallback((c: Category) => {
     setSelected(c);
     setForm((prev) => ({
       ...prev,
@@ -35,9 +35,9 @@ export function Contact() {
       quantity: c.moq ?? prev.quantity,
       message: buildBrief(c),
     }));
-  }
+  }, []);
 
-  useEffect(() => subscribeRequest(applyCategory), []);
+  useEffect(() => subscribeRequest(applyCategory), [applyCategory]);
 
   function update<K extends keyof typeof form>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
