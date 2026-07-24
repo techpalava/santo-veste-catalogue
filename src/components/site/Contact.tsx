@@ -6,11 +6,36 @@ import { subscribeRequest, buildBrief } from "@/lib/request-prefill";
 import { downloadRequestPdf } from "@/lib/request-pdf";
 
 const contactRows = [
-  { icon: Mail, label: "Email", value: "hello@santoveste.com" },
-  { icon: Phone, label: "Phone", value: "+234 000 000 0000" },
-  { icon: MessageCircle, label: "WhatsApp", value: "+234 000 000 0000" },
-  { icon: Instagram, label: "Instagram", value: "@santoveste" },
-  { icon: MapPin, label: "Studio", value: "Lagos, Nigeria" },
+  {
+    icon: Mail,
+    label: "Email",
+    value: "timtropiks@gmail.com",
+    href: "mailto:timtropiks@gmail.com",
+  },
+  {
+    icon: Phone,
+    label: "Phone",
+    value: "+234 810 220 5566",
+    href: "tel:+2348102205566",
+  },
+  {
+    icon: MessageCircle,
+    label: "WhatsApp",
+    value: "+234 810 220 5566",
+    href: "https://wa.me/2348102205566",
+  },
+  {
+    icon: Instagram,
+    label: "Instagram",
+    value: "@SantoVeste",
+    href: "https://instagram.com/SantoVeste",
+  },
+  {
+    icon: MapPin,
+    label: "Studio",
+    value: "2C Fagba, off Clegg Street, Surulere, Lagos",
+    href: "https://www.google.com/maps/search/?api=1&query=2C+Fagba%2C+off+Clegg+Street%2C+Surulere%2C+Lagos",
+  },
 ];
 
 const emptyForm = {
@@ -120,13 +145,19 @@ export function Contact() {
                 <div key={r.label} className="grid grid-cols-[auto_1fr_auto] items-center gap-4 py-4">
                   <r.icon className="size-4 text-ochre" />
                   <dt className="eyebrow text-ink/50">{r.label}</dt>
-                  <dd className="text-sm font-medium text-ink">{r.value}</dd>
+                  <dd className="text-right text-sm font-medium text-ink">
+                    <a
+                      href={r.href}
+                      target={r.href.startsWith("http") ? "_blank" : undefined}
+                      rel={r.href.startsWith("http") ? "noreferrer" : undefined}
+                      className="transition hover:text-ochre hover:underline"
+                    >
+                      {r.value}
+                    </a>
+                  </dd>
                 </div>
               ))}
             </dl>
-            <p className="text-xs text-ink/45">
-              Contact details are placeholders — swap in your real handles when ready.
-            </p>
           </div>
 
           <form

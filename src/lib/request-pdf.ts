@@ -137,7 +137,7 @@ export function downloadRequestPdf(form: FormSnapshot, selected: Category | null
   doc.line(margin, footerY - 10, pageW - margin, footerY - 10);
   doc.setFontSize(8);
   doc.setTextColor(140);
-  doc.text("Santo Veste · hello@santoveste.com · Lagos, Nigeria", margin, footerY);
+  doc.text("Santo Veste · timtropiks@gmail.com · +234 810 220 5566", margin, footerY);
 
   const slug = (selected?.id ?? "custom").replace(/[^a-z0-9-]/gi, "-");
   doc.save(`santo-veste-request-${slug}.pdf`);
