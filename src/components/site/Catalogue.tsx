@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { Heart } from "lucide-react";
 import { categories, type Category } from "@/lib/santo-veste-data";
 import { requestCategory } from "@/lib/request-prefill";
+import { useFavourites } from "@/lib/favourites";
 import { ProductDetailSheet } from "./ProductDetailSheet";
+import { useState } from "react";
 
 function requestAndScroll(c: Category) {
   requestCategory(c);
@@ -12,10 +14,14 @@ function ProductCard({
   c,
   feature,
   onOpen,
+  isFavourite,
+  onToggleFavourite,
 }: {
   c: Category;
   feature?: boolean;
   onOpen: (c: Category) => void;
+  isFavourite: boolean;
+  onToggleFavourite: (id: string) => void;
 }) {
   const cropScale = c.cardCrop?.scale ?? 1;
 
@@ -52,6 +58,22 @@ function ProductCard({
             {c.price.startsWith("Set") ? "Set price" : c.price}
           </span>
         )}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavourite(c.id);
+          }}
+          aria-label={isFavourite ? "Remove from saved" : "Save for later"}
+          aria-pressed={isFavourite}
+          className={`absolute right-3 top-12 grid size-9 place-items-center border-2 transition ${
+            isFavourite
+              ? "border-ochre bg-ochre text-paper"
+              : "border-paper/80 bg-paper/90 text-ink/60 hover:text-ink"
+          }`}
+        >
+          <Heart className={`size-4 ${isFavourite ? "fill-current" : ""}`} />
+        </button>
       </div>
       <div className="flex flex-1 flex-col gap-4 p-5 md:p-6">
         <div>
@@ -115,6 +137,7 @@ function ProductCard({
 export function Catalogue() {
   const [active, setActive] = useState<Category | null>(null);
   const [open, setOpen] = useState(false);
+  const { ids: favouriteIds, toggle, isFavourite } = useFavourites();
 
   const openCategory = (c: Category) => {
     setActive(c);
@@ -139,7 +162,14 @@ export function Catalogue() {
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((c, i) => (
-            <ProductCard key={c.id} c={c} feature={i === 4} onOpen={openCategory} />
+            <ProductCard
+              key={c.id}
+              c={c}
+              feature={i === 4}
+              onOpen={openCategory}
+              isFavourite={isFavourite(c.id)}
+              onToggleFavourite={toggle}
+            />
           ))}
         </div>
       </div>
@@ -151,6 +181,8 @@ export function Catalogue() {
           setOpen(false);
           setTimeout(() => requestAndScroll(c), 150);
         }}
+        isFavourite={active ? isFavourite(active.id) : false}
+        onToggleFavourite={(id) => toggle(id)}
       />
     </section>
   );
