@@ -36,11 +36,17 @@ export function Process() {
         </ol>
 
         <div className="mt-14 grid gap-8 md:grid-cols-[1.4fr_1fr] md:items-center">
-          <img
-            src={process}
-            alt="Santo Veste production — swatches, sketches and sewing"
-            className="aspect-[16/9] w-full border-2 border-ink object-cover"
-          />
+          <div className="aspect-[16/9] w-full overflow-hidden border-2 border-ink">
+            <img
+              src={process}
+              alt="Santo Veste team reviewing garment sketches, planning and sewing"
+              className="h-full w-full object-cover"
+              style={{
+                transform: "scale(1.72)",
+                transformOrigin: "49% 91%",
+              }}
+            />
+          </div>
           <blockquote className="border-l-4 border-ochre pl-6 font-display text-2xl font-bold leading-snug text-ink md:text-3xl">
             "Each Santo Veste creation tells a story of confidence — allowing
             wearers to stand out, inspire others, and remain true to their
