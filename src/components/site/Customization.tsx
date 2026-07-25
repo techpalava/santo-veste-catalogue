@@ -16,11 +16,17 @@ export function Customization() {
               branded packaging for bulk orders — every finish is done
               in-house so quality never leaves our hands.
             </p>
-            <img
-              src={customization}
-              alt="Fabric swatches, buttons and design references on a workshop table"
-              className="mt-6 aspect-[4/3] w-full border-2 border-paper/20 object-cover grayscale"
-            />
+            <div className="mt-6 aspect-[4/3] w-full overflow-hidden border-2 border-paper/20">
+              <img
+                src={customization}
+                alt="Two garment designers reviewing fabric swatches at a workshop table"
+                className="h-full w-full object-cover object-right grayscale"
+                style={{
+                  transform: "scale(1.96)",
+                  transformOrigin: "79% 46%",
+                }}
+              />
+            </div>
           </div>
           <ul className="grid grid-cols-1 gap-px bg-paper/15 sm:grid-cols-2">
             {services.map((s, i) => (
