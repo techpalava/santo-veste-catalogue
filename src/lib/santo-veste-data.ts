@@ -214,6 +214,11 @@ export const categories: Category[] = [
     sizes: "S – XXL",
     image: uniforms,
     pricing: makePricing(25000),
+    cardCrop: {
+      objectPosition: "75% top",
+      scale: 1.5,
+      transformOrigin: "20% 7%",
+    },
   },
   {
     id: "scrubs",
