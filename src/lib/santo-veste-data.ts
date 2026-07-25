@@ -198,9 +198,7 @@ export const categories: Category[] = [
     image: jerseys,
     pricing: makePricing(18000),
     cardCrop: {
-      objectPosition: "left top",
-      scale: 2.75,
-      transformOrigin: "28% top",
+      objectPosition: "14% center",
     },
   },
   {
