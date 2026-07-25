@@ -25,6 +25,30 @@ export type ProductCardCrop = {
   transformOrigin?: string;
 };
 
+export type PricingTier = {
+  id: string;
+  name: string;
+  multiplier: number;
+};
+
+export type PrintMethod = {
+  id: string;
+  name: string;
+  addOn: number;
+};
+
+export type BulkDiscount = {
+  threshold: number;
+  rate: number;
+};
+
+export type CategoryPricing = {
+  baseUnit: number;
+  tiers: PricingTier[];
+  methods: PrintMethod[];
+  discounts: BulkDiscount[];
+};
+
 export type Category = {
   id: string;
   index: string;
@@ -38,7 +62,35 @@ export type Category = {
   image: string;
   cardCrop?: ProductCardCrop;
   gallery?: ProductGalleryImage[];
+  pricing?: CategoryPricing;
 };
+
+const defaultTiers: PricingTier[] = [
+  { id: "standard", name: "Standard fabric", multiplier: 1 },
+  { id: "premium", name: "Premium fabric", multiplier: 1.25 },
+];
+
+const defaultMethods: PrintMethod[] = [
+  { id: "none", name: "No decoration", addOn: 0 },
+  { id: "screen", name: "Screen print", addOn: 800 },
+  { id: "dtf", name: "DTF / DTG", addOn: 1200 },
+  { id: "embroidery", name: "Embroidery", addOn: 1500 },
+];
+
+const defaultDiscounts: BulkDiscount[] = [
+  { threshold: 100, rate: 0.05 },
+  { threshold: 250, rate: 0.1 },
+  { threshold: 500, rate: 0.15 },
+];
+
+function makePricing(baseUnit: number): CategoryPricing {
+  return {
+    baseUnit,
+    tiers: defaultTiers,
+    methods: defaultMethods,
+    discounts: defaultDiscounts,
+  };
+}
 
 export const categories: Category[] = [
   {
@@ -52,6 +104,7 @@ export const categories: Category[] = [
     price: "from NGN 15,000",
     sizes: "S – XXXL",
     image: roundneck,
+    pricing: makePricing(15000),
     cardCrop: {
       objectPosition: "left center",
       scale: 1.06,
@@ -69,6 +122,7 @@ export const categories: Category[] = [
     price: "from NGN 15,000",
     sizes: "S – XXXL",
     image: layered,
+    pricing: makePricing(15000),
     cardCrop: {
       objectPosition: "left center",
       scale: 1.06,
@@ -86,6 +140,7 @@ export const categories: Category[] = [
     price: "from NGN 20,000",
     sizes: "S – XXXL",
     image: polos,
+    pricing: makePricing(20000),
   },
   {
     id: "sweatshirts",
@@ -99,6 +154,7 @@ export const categories: Category[] = [
     price: "from NGN 20,000",
     sizes: "S – XXXL",
     image: sweatshirts,
+    pricing: makePricing(20000),
     cardCrop: {
       objectPosition: "left top",
       scale: 2.2,
@@ -117,6 +173,7 @@ export const categories: Category[] = [
     price: "Set from NGN 40,000 · Hoodie 25,000 · Joggers 20,000",
     sizes: "S – XXXL",
     image: hoodies,
+    pricing: makePricing(40000),
     cardCrop: {
       objectPosition: "center top",
       scale: 1.44,
@@ -131,8 +188,10 @@ export const categories: Category[] = [
     fabrics: "Breathable performance blends",
     features: "Sublimation, team names, numbers, crests",
     moq: "30 pieces",
+    price: "from NGN 18,000",
     sizes: "S – XXXL",
     image: jerseys,
+    pricing: makePricing(18000),
   },
   {
     id: "uniforms",
@@ -143,8 +202,10 @@ export const categories: Category[] = [
     fabrics: "Durable cotton blends, suiting fabrics",
     features: "Blazers, crests, monogramming, matching sets",
     moq: "30 pieces",
+    price: "from NGN 25,000",
     sizes: "S – XXL",
     image: uniforms,
+    pricing: makePricing(25000),
   },
   {
     id: "scrubs",
@@ -154,8 +215,10 @@ export const categories: Category[] = [
     fabrics: "Antimicrobial poly-cotton blends",
     features: "Reinforced stitching, roomy pockets, embroidered branding",
     moq: "30 pieces",
+    price: "from NGN 18,000",
     sizes: "S – XXXL",
     image: scrubs,
+    pricing: makePricing(18000),
   },
   {
     id: "mandarin",
@@ -164,8 +227,10 @@ export const categories: Category[] = [
     description: "Smart collared T-shirts combining style and comfort.",
     fabrics: "Cotton, linen blends",
     features: "Mandarin collar, pleats, custom buttons",
+    price: "from NGN 22,000",
     sizes: "S – XXXL",
     image: mandarin,
+    pricing: makePricing(22000),
   },
   {
     id: "collared",
@@ -174,8 +239,10 @@ export const categories: Category[] = [
     description: "Smart collared shirts combining style and comfort.",
     fabrics: "Cotton, poplin, striped blends",
     features: "Bespoke sizing, patterned options",
+    price: "from NGN 22,000",
     sizes: "S – XXXL",
     image: collared,
+    pricing: makePricing(22000),
   },
   {
     id: "jackets",
@@ -185,8 +252,10 @@ export const categories: Category[] = [
       "Comfortable, premium multipurpose overshirts and bombers for casual and work use.",
     fabrics: "Cotton twill, technical shells",
     features: "Bomber, overshirt, embroidered branding",
+    price: "from NGN 35,000",
     sizes: "S – XXXL",
     image: jackets,
+    pricing: makePricing(35000),
   },
   {
     id: "shorts",
@@ -198,6 +267,7 @@ export const categories: Category[] = [
     price: "from NGN 15,000",
     sizes: "S – XXXL",
     image: shorts,
+    pricing: makePricing(15000),
   },
 ];
 

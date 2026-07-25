@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Mail, Phone, MessageCircle, Instagram, MapPin, X, Download } from "lucide-react";
 import { categories, type Category } from "@/lib/santo-veste-data";
-import { subscribeRequest, buildBrief } from "@/lib/request-prefill";
+import { subscribeRequest, buildBriefForCategories } from "@/lib/request-prefill";
 import { downloadRequestPdf } from "@/lib/request-pdf";
+import { useFavourites, clearFavourites } from "@/lib/favourites";
 
 const contactRows = [
   {
@@ -47,22 +48,31 @@ const emptyForm = {
   message: "",
 };
 
+const WHATSAPP_NUMBER = "2348102205566";
+
 export function Contact() {
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState(emptyForm);
-  const [selected, setSelected] = useState<Category | null>(null);
+  const [selected, setSelected] = useState<Category[]>([]);
+  const { ids: favouriteIds, clear } = useFavourites();
 
-  const applyCategory = useCallback((c: Category) => {
-    setSelected(c);
+  const favouriteCategories = useMemo(
+    () => categories.filter((c) => favouriteIds.includes(c.id)),
+    [favouriteIds]
+  );
+
+  const applyCategories = useCallback((items: Category[]) => {
+    setSelected(items);
     setForm((prev) => ({
       ...prev,
-      category: c.id,
-      quantity: c.moq ?? prev.quantity,
-      message: buildBrief(c),
+      category: items.length === 1 ? items[0].id : "",
+      quantity:
+        items.length === 1 ? items[0].moq?.replace(/\D/g, "") ?? prev.quantity : prev.quantity,
+      message: buildBriefForCategories(items),
     }));
   }, []);
 
-  useEffect(() => subscribeRequest(applyCategory), [applyCategory]);
+  useEffect(() => subscribeRequest(applyCategories), [applyCategories]);
 
   function update<K extends keyof typeof form>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -71,16 +81,21 @@ export function Contact() {
   function selectCategory(value: string) {
     const category = categories.find((c) => c.id === value) ?? null;
     if (category) {
-      applyCategory(category);
+      applyCategories([category]);
       return;
     }
 
-    setSelected(null);
+    setSelected([]);
     setForm((prev) => ({ ...prev, category: value }));
   }
 
+  function removeCategory(id: string) {
+    const next = selected.filter((c) => c.id !== id);
+    applyCategories(next);
+  }
+
   function clearReference() {
-    setSelected(null);
+    setSelected([]);
     setForm((prev) => ({
       ...prev,
       category: "",
@@ -113,7 +128,8 @@ export function Contact() {
         description: "We'd normally reply within one business day.",
       });
       setForm(emptyForm);
-      setSelected(null);
+      setSelected([]);
+      clear();
       setSubmitting(false);
     }, 500);
   }
@@ -124,6 +140,12 @@ export function Contact() {
     toast.success("PDF downloaded", {
       description: "Share it with the Santo Veste team.",
     });
+  }
+
+  function openWhatsApp() {
+    const items = selected.length > 0 ? selected : favouriteCategories;
+    const text = buildWhatsAppText(form, items);
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, "_blank");
   }
 
   return (
@@ -164,27 +186,45 @@ export function Contact() {
             onSubmit={onSubmit}
             className="grid gap-5 border-2 border-ink bg-paper p-6 shadow-[8px_8px_0_var(--ink)] md:p-10"
           >
-            {selected && (
+            {selected.length > 0 && (
               <div className="relative border border-ink/15 bg-secondary p-4 pr-10">
-                <p className="eyebrow text-ink/50">Requesting</p>
-                <p className="mt-1 font-display text-lg font-bold text-ink">{selected.name}</p>
-                <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-ink/70">
-                  {selected.moq && (
+                <p className="eyebrow text-ink/50">
+                  Requesting {selected.length > 1 ? `(${selected.length} items)` : ""}
+                </p>
+                <div className="mt-2 space-y-2">
+                  {selected.map((c) => (
+                    <div key={c.id} className="flex items-start justify-between gap-3">
+                      <p className="font-display text-base font-bold text-ink">{c.name}</p>
+                      <button
+                        type="button"
+                        onClick={() => removeCategory(c.id)}
+                        aria-label={`Remove ${c.name}`}
+                        className="shrink-0 p-1 text-ink/40 transition hover:text-ink"
+                      >
+                        <X className="size-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-ink/70">
+                  {selected.length === 1 && selected[0].moq && (
                     <div>
                       <dt className="inline eyebrow text-ink/45">MOQ · </dt>
-                      <dd className="inline">{selected.moq}</dd>
+                      <dd className="inline">{selected[0].moq}</dd>
                     </div>
                   )}
-                  {selected.price && (
+                  {selected.length === 1 && selected[0].price && (
                     <div>
                       <dt className="inline eyebrow text-ink/45">Base · </dt>
-                      <dd className="inline">{selected.price}</dd>
+                      <dd className="inline">{selected[0].price}</dd>
                     </div>
                   )}
-                  <div className="col-span-2">
-                    <dt className="inline eyebrow text-ink/45">Fabrics · </dt>
-                    <dd className="inline">{selected.fabrics}</dd>
-                  </div>
+                  {selected.length === 1 && (
+                    <div className="col-span-2">
+                      <dt className="inline eyebrow text-ink/45">Fabrics · </dt>
+                      <dd className="inline">{selected[0].fabrics}</dd>
+                    </div>
+                  )}
                 </dl>
                 <button
                   type="button"
@@ -236,14 +276,24 @@ export function Contact() {
               />
             </label>
             <div className="mt-2 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <button
-                type="button"
-                onClick={downloadPdf}
-                className="inline-flex items-center justify-center gap-2 border border-ink/30 px-5 py-3 text-xs font-semibold uppercase tracking-widest text-ink transition hover:border-ink hover:bg-ink hover:text-paper"
-              >
-                <Download className="size-4" />
-                Download PDF
-              </button>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={downloadPdf}
+                  className="inline-flex items-center justify-center gap-2 border border-ink/30 px-5 py-3 text-xs font-semibold uppercase tracking-widest text-ink transition hover:border-ink hover:bg-ink hover:text-paper"
+                >
+                  <Download className="size-4" />
+                  Download PDF
+                </button>
+                <button
+                  type="button"
+                  onClick={openWhatsApp}
+                  className="inline-flex items-center justify-center gap-2 border border-ink/30 px-5 py-3 text-xs font-semibold uppercase tracking-widest text-ink transition hover:border-ink hover:bg-ink hover:text-paper"
+                >
+                  <MessageCircle className="size-4" />
+                  WhatsApp
+                </button>
+              </div>
               <button
                 type="submit"
                 disabled={submitting}
@@ -296,4 +346,19 @@ function Field({
       />
     </label>
   );
+}
+
+function buildWhatsAppText(form: typeof emptyForm, items: Category[]): string {
+  let text = "Hello Santo Veste, I'd like to request a quote";
+  if (items.length > 0) {
+    text += " for:\n\n";
+    text += items.map((c) => `- ${c.name}${c.moq ? ` (MOQ: ${c.moq})` : ""}`).join("\n");
+  }
+  text += "\n\nMy details:";
+  if (form.name) text += `\nName: ${form.name}`;
+  if (form.email) text += `\nEmail: ${form.email}`;
+  if (form.phone) text += `\nPhone: ${form.phone}`;
+  if (form.quantity) text += `\nQuantity: ${form.quantity}`;
+  if (form.message) text += `\n\nBrief:\n${form.message}`;
+  return text;
 }
