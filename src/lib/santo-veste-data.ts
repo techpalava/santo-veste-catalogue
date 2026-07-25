@@ -180,7 +180,7 @@ export const categories: Category[] = [
     image: hoodieFullModels,
     pricing: makePricing(40000),
     cardCrop: {
-      objectPosition: "center top",
+      objectPosition: "center center",
     },
   },
   {
