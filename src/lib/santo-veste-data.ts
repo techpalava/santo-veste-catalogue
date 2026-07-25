@@ -141,6 +141,11 @@ export const categories: Category[] = [
     sizes: "S – XXXL",
     image: polos,
     pricing: makePricing(20000),
+    cardCrop: {
+      objectPosition: "center top",
+      scale: 1.72,
+      transformOrigin: "center top",
+    },
   },
   {
     id: "sweatshirts",
@@ -192,6 +197,11 @@ export const categories: Category[] = [
     sizes: "S – XXXL",
     image: jerseys,
     pricing: makePricing(18000),
+    cardCrop: {
+      objectPosition: "left top",
+      scale: 2.75,
+      transformOrigin: "28% top",
+    },
   },
   {
     id: "uniforms",
@@ -219,6 +229,11 @@ export const categories: Category[] = [
     sizes: "S – XXXL",
     image: scrubs,
     pricing: makePricing(18000),
+    cardCrop: {
+      objectPosition: "center top",
+      scale: 1.28,
+      transformOrigin: "center top",
+    },
   },
   {
     id: "mandarin",
@@ -231,6 +246,11 @@ export const categories: Category[] = [
     sizes: "S – XXXL",
     image: mandarin,
     pricing: makePricing(22000),
+    cardCrop: {
+      objectPosition: "center top",
+      scale: 1.6,
+      transformOrigin: "center top",
+    },
   },
   {
     id: "collared",
@@ -243,6 +263,11 @@ export const categories: Category[] = [
     sizes: "S – XXXL",
     image: collared,
     pricing: makePricing(22000),
+    cardCrop: {
+      objectPosition: "center top",
+      scale: 1.55,
+      transformOrigin: "center top",
+    },
   },
   {
     id: "jackets",
@@ -256,6 +281,11 @@ export const categories: Category[] = [
     sizes: "S – XXXL",
     image: jackets,
     pricing: makePricing(35000),
+    cardCrop: {
+      objectPosition: "20% center",
+      scale: 1.04,
+      transformOrigin: "center",
+    },
   },
   {
     id: "shorts",
@@ -268,6 +298,11 @@ export const categories: Category[] = [
     sizes: "S – XXXL",
     image: shorts,
     pricing: makePricing(15000),
+    cardCrop: {
+      objectPosition: "right top",
+      scale: 2.45,
+      transformOrigin: "50% 35%",
+    },
   },
 ];
 
