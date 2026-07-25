@@ -6,7 +6,6 @@ import hoodies from "@/assets/catalogue/hoodies.jpg";
 import jerseys from "@/assets/catalogue/jerseys.jpg";
 import uniforms from "@/assets/catalogue/uniforms.jpg";
 import scrubs from "@/assets/catalogue/scrubs.jpg";
-import mandarin from "@/assets/catalogue/mandarin.jpg";
 import mandarinFullModels from "@/assets/catalogue/mandarin-full-models.png";
 import collared from "@/assets/catalogue/collared.jpg";
 import jackets from "@/assets/catalogue/jackets.jpg";
