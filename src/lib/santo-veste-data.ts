@@ -2,7 +2,7 @@ import roundneck from "@/assets/catalogue/roundneck.jpg";
 import layered from "@/assets/catalogue/layered.jpg";
 import polos from "@/assets/catalogue/polos.jpg";
 import sweatshirts from "@/assets/catalogue/sweatshirts.jpg";
-import hoodies from "@/assets/catalogue/hoodies.jpg";
+import hoodieFullModels from "@/assets/catalogue/hoodies-two-full-models.png";
 import jerseys from "@/assets/catalogue/jerseys.jpg";
 import uniforms from "@/assets/catalogue/uniforms.jpg";
 import scrubs from "@/assets/catalogue/scrubs.jpg";
@@ -177,12 +177,12 @@ export const categories: Category[] = [
     moq: "30 pieces",
     price: "Set from NGN 40,000 · Hoodie 25,000 · Joggers 20,000",
     sizes: "S – XXXL",
-    image: hoodies,
+    image: hoodieFullModels,
     pricing: makePricing(40000),
     cardCrop: {
-      objectPosition: "center top",
-      scale: 1.44,
-      transformOrigin: "center top",
+      objectPosition: "center center",
+      scale: 1.12,
+      transformOrigin: "center center",
     },
   },
   {
