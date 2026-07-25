@@ -4,7 +4,7 @@ import { Mail, Phone, MessageCircle, Instagram, MapPin, X, Download } from "luci
 import { categories, type Category } from "@/lib/santo-veste-data";
 import { subscribeRequest, buildBriefForCategories } from "@/lib/request-prefill";
 import { downloadRequestPdf } from "@/lib/request-pdf";
-import { useFavourites, clearFavourites } from "@/lib/favourites";
+import { useFavourites } from "@/lib/favourites";
 
 const contactRows = [
   {
@@ -67,7 +67,11 @@ export function Contact() {
       ...prev,
       category: items.length === 1 ? items[0].id : "",
       quantity:
-        items.length === 1 ? items[0].moq?.replace(/\D/g, "") ?? prev.quantity : prev.quantity,
+        items.length === 1
+          ? items[0].moq?.replace(/\D/g, "") ?? prev.quantity
+          : items.length === 0
+            ? ""
+            : prev.quantity,
       message: buildBriefForCategories(items),
     }));
   }, []);
@@ -105,9 +109,11 @@ export function Contact() {
   }
 
   function validateRequest() {
-    if (!form.name.trim() || !form.email.trim() || !form.category || !form.message.trim()) {
+    const hasCategory = selected.length > 0 || Boolean(form.category);
+
+    if (!form.name.trim() || !form.email.trim() || !hasCategory || !form.message.trim()) {
       toast.error("Complete the required fields", {
-        description: "Add your name, email, product category and brief first.",
+        description: "Add your name, email, at least one product category and a brief first.",
       });
       return false;
     }
@@ -122,6 +128,7 @@ export function Contact() {
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!validateRequest()) return;
     setSubmitting(true);
     setTimeout(() => {
       toast.success("Thanks — this is a demo form.", {
@@ -247,13 +254,15 @@ export function Contact() {
               <select
                 id="category-select"
                 name="category"
-                required
+                required={selected.length === 0}
                 value={form.category}
                 onChange={(e) => selectCategory(e.target.value)}
                 className="h-11 border border-ink/20 bg-paper px-3 text-sm text-ink focus:border-ink focus:outline-none"
               >
                 <option value="" disabled>
-                  Select a category
+                  {selected.length > 1
+                    ? `${selected.length} saved categories selected`
+                    : "Select a category"}
                 </option>
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
