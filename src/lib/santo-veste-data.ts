@@ -6,7 +6,7 @@ import hoodies from "@/assets/catalogue/hoodies.jpg";
 import jerseys from "@/assets/catalogue/jerseys.jpg";
 import uniforms from "@/assets/catalogue/uniforms.jpg";
 import scrubs from "@/assets/catalogue/scrubs.jpg";
-import mandarin from "@/assets/catalogue/mandarin.jpg";
+import mandarinFullModels from "@/assets/catalogue/mandarin-full-models.png";
 import collared from "@/assets/catalogue/collared.jpg";
 import jackets from "@/assets/catalogue/jackets.jpg";
 import shorts from "@/assets/catalogue/shorts.jpg";
@@ -247,12 +247,10 @@ export const categories: Category[] = [
     features: "Mandarin collar, pleats, custom buttons",
     price: "from NGN 22,000",
     sizes: "S – XXXL",
-    image: mandarin,
+    image: mandarinFullModels,
     pricing: makePricing(22000),
     cardCrop: {
       objectPosition: "center top",
-      scale: 1.6,
-      transformOrigin: "center top",
     },
   },
   {
