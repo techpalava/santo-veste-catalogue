@@ -25,6 +25,30 @@ export type ProductCardCrop = {
   transformOrigin?: string;
 };
 
+export type PricingTier = {
+  id: string;
+  name: string;
+  multiplier: number;
+};
+
+export type PrintMethod = {
+  id: string;
+  name: string;
+  addOn: number;
+};
+
+export type BulkDiscount = {
+  threshold: number;
+  rate: number;
+};
+
+export type CategoryPricing = {
+  baseUnit: number;
+  tiers: PricingTier[];
+  methods: PrintMethod[];
+  discounts: BulkDiscount[];
+};
+
 export type Category = {
   id: string;
   index: string;
@@ -38,6 +62,7 @@ export type Category = {
   image: string;
   cardCrop?: ProductCardCrop;
   gallery?: ProductGalleryImage[];
+  pricing?: CategoryPricing;
 };
 
 export const categories: Category[] = [
