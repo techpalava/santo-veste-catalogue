@@ -1,51 +1,68 @@
-## Prefill contact form from "Request this"
+# Standout Feature Roadmap — Santo Veste Catalogue
 
-Extend the existing "Request this" flow so it also fills the Quantity, Brief message, and (as read-only reference) the selected category's MOQ / fabrics / base price — not just the category dropdown.
+Based on the current one-page catalogue (hero, about, 12-category grid, detail sheet, contact form with PDF download), here are the features that would most clearly differentiate the experience and drive real inquiries.
 
-### Approach
+## 1. Quick wins — ship fast, visible impact
 
-Replace the current DOM-poke prefill (`document.getElementById("category-select").value = id`) with a shared, typed store. A tiny module-scope event bus in `src/lib/request-prefill.ts` exposes:
+### A. Live quote estimator on every category card
+Add a small calculator inside the product sheet that lets visitors enter quantity and pick a print/embroidery method, then shows an estimated price range instantly. This turns browsing into action and reduces back-and-forth emails.
 
-- `requestCategory(c: Category)` — called by `Catalogue.tsx` and `ProductDetailSheet.tsx`.
-- `subscribeRequest(fn)` — used by `Contact.tsx` to hydrate the form.
+- Inputs: quantity, fabric tier (standard / premium), print method (screen / DTF / embroidery / none).
+- Output: estimated per-unit and total price, with a disclaimer that final pricing requires confirmation.
+- Tech: extend `Category` type with pricing rules; compute client-side in the sheet.
 
-Handlers in `Catalogue.tsx` / drawer switch from `prefillAndScroll(id)` to `requestCategory(c)` + smooth-scroll to `#contact`. The DOM lookup goes away.
+### B. One-tap WhatsApp inquiry
+Replace the demo-form-only flow with a WhatsApp button that opens a pre-filled message containing the selected category, MOQ, fabrics and the user’s brief. This matches how many Nigerian customers actually prefer to close orders.
 
-### What gets prefilled in `Contact.tsx`
+- Keep the existing contact form for email inquiries.
+- Add a secondary "Chat on WhatsApp" action that uses `https://wa.me/` with encoded text.
 
-On subscription callback with a `Category`:
+### C. Category search and filters
+A sticky filter bar above the catalogue lets users narrow by MOQ, price band, fabric type or customization option. With 12 categories this already saves time; it also signals a professional, searchable catalogue.
 
-- **Category select** → `c.id` (unchanged behaviour).
-- **Quantity input** → parsed from `c.moq` (e.g. `"30 pieces"` → `"30 pieces"`); empty if no MOQ.
-- **Brief textarea** → templated, editable string:
+- Filters: price range, MOQ threshold, fabric keyword, customization type.
+- Search: category name and feature keywords.
 
-  ```
-  Hi — I'd like a quote for {c.name} (min. {c.moq}).
+## 2. Differentiators — medium effort, high business value
 
-  Fabrics of interest: {c.fabrics}
-  Options: {c.features}
-  Base price reference: {c.price ?? "on request"}
+### D. Saved favourites / mood board
+Let visitors "heart" categories and build a shortlist. The shortlist persists in `localStorage`, can be shared via a URL hash, and can be sent as one combined inquiry. This is especially useful for corporate buyers comparing several products.
 
-  My details:
-  - Quantity:
-  - Sizes needed:
-  - Print / embroidery:
-  - Deadline:
-  ```
+- Heart toggle on cards and sheet.
+- Floating summary badge showing saved count.
+- Prefill contact form with all saved categories when requesting a quote.
 
-  Missing lines (no MOQ / no price) are omitted so the message stays clean.
+### E. Multi-image lookbook per category
+Upgrade each category from a single image to a small gallery (2–4 shots: front, detail, fabric close-up, worn context). This is the single biggest visual upgrade for a fashion catalogue and justifies the "premium" positioning.
 
-- **Reference summary chip** rendered above the form fields when a prefill is active: a small dismissible block showing `Name · MOQ · Base price · Fabrics` so the user sees the spec they requested without hunting through the brief. Dismissing it clears the chip only; form values stay put.
+- Add `gallery: ProductGalleryImage[]` to the `Category` type.
+- Use Embla carousel (already in `package.json`) inside the product sheet.
 
-Form state moves to controlled inputs (`useState` for name/email/phone/quantity/category/message + `selected: Category | null`) so the subscription can update them and `reset()` still works on submit.
+### F. Interactive size guide
+Add a size tab in the product sheet with a measurement diagram and a simple calculator: user enters chest / waist / height and gets a recommended size. Reduces fit anxiety and returns.
 
-### Files touched
+- Static size chart + simple recommendation logic.
+- Optional: visual SVG body diagram with measurement points.
 
-- `src/lib/request-prefill.ts` — new tiny pub/sub module (no deps).
-- `src/components/site/Catalogue.tsx` — swap `prefillAndScroll` for `requestCategory` + scroll; drop the DOM id lookup.
-- `src/components/site/ProductDetailSheet.tsx` — `onRequest` uses the new bus.
-- `src/components/site/Contact.tsx` — controlled inputs, `useEffect` subscription, reference chip, template builder.
+## 3. Premium features — bigger builds
 
-### Out of scope
+### G. Real inquiry backend with status tracking
+Move the contact form from demo to production by storing inquiries in Lovable Cloud (Supabase). Each submission gets a reference number; customers can return to a `/track/:id` page to see quote status (received → reviewing → quoted → in production → delivered).
 
-Persistence across reloads, multi-category requests, backend submission, and any change to the demo toast behaviour.
+- Requires Lovable Cloud enabled.
+- Admin view optional for Santo Veste staff to update status.
+
+### H. Branded shareable quote page
+After form submission, generate a public or password-lite quote page (`/quote/:id`) that shows the selected items, specs and estimated pricing in a clean, shareable layout. Buyers can forward it to procurement teams or finance.
+
+- Builds on (G) but can also be generated from the existing PDF flow.
+
+## Recommended first slice
+
+If you want one release that stands out immediately, combine **A (quote estimator) + B (WhatsApp) + D (favourites)**. These three together make the catalogue feel like a working sales tool rather than a brochure, without requiring a backend.
+
+## Open questions before building
+
+1. Do you want to keep this as a purely frontend/demo site, or should we connect real inquiry storage and notifications?
+2. Do you have additional product photography for a lookbook gallery, or should we work with the existing 12 images?
+3. Which channel matters most for closing leads: email, WhatsApp, or both equally?
