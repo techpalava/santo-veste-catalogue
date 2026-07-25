@@ -181,6 +181,8 @@ export const categories: Category[] = [
     pricing: makePricing(40000),
     cardCrop: {
       objectPosition: "center center",
+      scale: 1.12,
+      transformOrigin: "center center",
     },
   },
   {
