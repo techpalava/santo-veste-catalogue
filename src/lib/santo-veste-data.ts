@@ -1,8 +1,6 @@
 import roundneckFullModels from "@/assets/catalogue/roundneck-two-full-models.png";
 import layered from "@/assets/catalogue/layered.jpg";
 import poloFullModels from "@/assets/catalogue/polos-two-full-models.png";
-import sweatshirts from "@/assets/catalogue/sweatshirts.jpg";
-import polos from "@/assets/catalogue/polos.jpg";
 import sweatshirtFullModels from "@/assets/catalogue/sweatshirts-two-full-models.png";
 import hoodieFullModels from "@/assets/catalogue/hoodies-two-full-models.png";
 import jerseys from "@/assets/catalogue/jerseys.jpg";
@@ -10,8 +8,6 @@ import uniformFullStudents from "@/assets/catalogue/uniforms-two-full-students.p
 import scrubs from "@/assets/catalogue/scrubs.jpg";
 import mandarinFullModels from "@/assets/catalogue/mandarin-full-models.png";
 import collaredFullModels from "@/assets/catalogue/collared-two-full-models.png";
-import jackets from "@/assets/catalogue/jackets.jpg";
-import collared from "@/assets/catalogue/collared.jpg";
 import jacketFullModels from "@/assets/catalogue/jackets-two-full-models.png";
 import shorts from "@/assets/catalogue/shorts.jpg";
 
