@@ -8,7 +8,7 @@ import uniforms from "@/assets/catalogue/uniforms.jpg";
 import scrubs from "@/assets/catalogue/scrubs.jpg";
 import mandarinFullModels from "@/assets/catalogue/mandarin-full-models.png";
 import collared from "@/assets/catalogue/collared.jpg";
-import jackets from "@/assets/catalogue/jackets.jpg";
+import jacketFullModels from "@/assets/catalogue/jackets-two-full-models.png";
 import shorts from "@/assets/catalogue/shorts.jpg";
 
 export type ProductGalleryImage = {
@@ -280,12 +280,10 @@ export const categories: Category[] = [
     features: "Bomber, overshirt, embroidered branding",
     price: "from NGN 35,000",
     sizes: "S – XXXL",
-    image: jackets,
+    image: jacketFullModels,
     pricing: makePricing(35000),
     cardCrop: {
-      objectPosition: "20% center",
-      scale: 1.04,
-      transformOrigin: "center",
+      objectPosition: "center center",
     },
   },
   {
