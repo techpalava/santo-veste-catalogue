@@ -9,6 +9,8 @@ import jerseys from "@/assets/catalogue/jerseys.jpg";
 import uniformFullStudents from "@/assets/catalogue/uniforms-two-full-students.png";
 import scrubs from "@/assets/catalogue/scrubs.jpg";
 import mandarinFullModels from "@/assets/catalogue/mandarin-full-models.png";
+import collaredFullModels from "@/assets/catalogue/collared-two-full-models.png";
+import jackets from "@/assets/catalogue/jackets.jpg";
 import collared from "@/assets/catalogue/collared.jpg";
 import jacketFullModels from "@/assets/catalogue/jackets-two-full-models.png";
 import shorts from "@/assets/catalogue/shorts.jpg";
@@ -256,12 +258,10 @@ export const categories: Category[] = [
     features: "Bespoke sizing, patterned options",
     price: "from NGN 22,000",
     sizes: "S – XXXL",
-    image: collared,
+    image: collaredFullModels,
     pricing: makePricing(22000),
     cardCrop: {
-      objectPosition: "center top",
-      scale: 1.55,
-      transformOrigin: "center top",
+      objectPosition: "center center",
     },
   },
   {
