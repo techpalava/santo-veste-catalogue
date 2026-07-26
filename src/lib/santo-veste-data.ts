@@ -1,4 +1,4 @@
-import roundneck from "@/assets/catalogue/roundneck.jpg";
+import roundneckFullModels from "@/assets/catalogue/roundneck-two-full-models.png";
 import layered from "@/assets/catalogue/layered.jpg";
 import polos from "@/assets/catalogue/polos.jpg";
 import sweatshirtFullModels from "@/assets/catalogue/sweatshirts-two-full-models.png";
@@ -103,12 +103,10 @@ export const categories: Category[] = [
     moq: "30 pieces",
     price: "from NGN 15,000",
     sizes: "S – XXXL",
-    image: roundneck,
+    image: roundneckFullModels,
     pricing: makePricing(15000),
     cardCrop: {
-      objectPosition: "left center",
-      scale: 1.06,
-      transformOrigin: "left center",
+      objectPosition: "center center",
     },
   },
   {
