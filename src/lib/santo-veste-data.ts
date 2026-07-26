@@ -1,14 +1,18 @@
-import roundneck from "@/assets/catalogue/roundneck.jpg";
+import roundneckFullModels from "@/assets/catalogue/roundneck-two-full-models.png";
 import layered from "@/assets/catalogue/layered.jpg";
-import polos from "@/assets/catalogue/polos.jpg";
+import poloFullModels from "@/assets/catalogue/polos-two-full-models.png";
 import sweatshirts from "@/assets/catalogue/sweatshirts.jpg";
+import polos from "@/assets/catalogue/polos.jpg";
+import sweatshirtFullModels from "@/assets/catalogue/sweatshirts-two-full-models.png";
 import hoodieFullModels from "@/assets/catalogue/hoodies-two-full-models.png";
 import jerseys from "@/assets/catalogue/jerseys.jpg";
-import uniforms from "@/assets/catalogue/uniforms.jpg";
+import uniformFullStudents from "@/assets/catalogue/uniforms-two-full-students.png";
 import scrubs from "@/assets/catalogue/scrubs.jpg";
 import mandarinFullModels from "@/assets/catalogue/mandarin-full-models.png";
 import collaredFullModels from "@/assets/catalogue/collared-two-full-models.png";
 import jackets from "@/assets/catalogue/jackets.jpg";
+import collared from "@/assets/catalogue/collared.jpg";
+import jacketFullModels from "@/assets/catalogue/jackets-two-full-models.png";
 import shorts from "@/assets/catalogue/shorts.jpg";
 
 export type ProductGalleryImage = {
@@ -103,12 +107,10 @@ export const categories: Category[] = [
     moq: "30 pieces",
     price: "from NGN 15,000",
     sizes: "S – XXXL",
-    image: roundneck,
+    image: roundneckFullModels,
     pricing: makePricing(15000),
     cardCrop: {
-      objectPosition: "left center",
-      scale: 1.06,
-      transformOrigin: "left center",
+      objectPosition: "center center",
     },
   },
   {
@@ -139,12 +141,10 @@ export const categories: Category[] = [
     moq: "30 pieces",
     price: "from NGN 20,000",
     sizes: "S – XXXL",
-    image: polos,
+    image: poloFullModels,
     pricing: makePricing(20000),
     cardCrop: {
-      objectPosition: "center top",
-      scale: 1.72,
-      transformOrigin: "center top",
+      objectPosition: "center center",
     },
   },
   {
@@ -158,12 +158,10 @@ export const categories: Category[] = [
     moq: "30 pieces",
     price: "from NGN 20,000",
     sizes: "S – XXXL",
-    image: sweatshirts,
+    image: sweatshirtFullModels,
     pricing: makePricing(20000),
     cardCrop: {
-      objectPosition: "left top",
-      scale: 2.2,
-      transformOrigin: "left top",
+      objectPosition: "center center",
     },
   },
   {
@@ -212,12 +210,10 @@ export const categories: Category[] = [
     moq: "30 pieces",
     price: "from NGN 25,000",
     sizes: "S – XXL",
-    image: uniforms,
+    image: uniformFullStudents,
     pricing: makePricing(25000),
     cardCrop: {
-      objectPosition: "75% top",
-      scale: 1.5,
-      transformOrigin: "20% 7%",
+      objectPosition: "center center",
     },
   },
   {
@@ -278,12 +274,10 @@ export const categories: Category[] = [
     features: "Bomber, overshirt, embroidered branding",
     price: "from NGN 35,000",
     sizes: "S – XXXL",
-    image: jackets,
+    image: jacketFullModels,
     pricing: makePricing(35000),
     cardCrop: {
-      objectPosition: "20% center",
-      scale: 1.04,
-      transformOrigin: "center",
+      objectPosition: "center center",
     },
   },
   {
